@@ -1,0 +1,25 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>170</x><y>150</y><w>380</w><h>80</h></coordinates><panel_attributes>_Pandas/Scikit Data Manipulation_
+--
++ Take in csv
++ Replace all nulls with mean value for that field or drop that row
++ Split data into input and outfit fields
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>440</x><y>290</y><w>290</w><h>140</h></coordinates><panel_attributes>_Scikit learning_
+--
++ Specify model type (Classification/Regression)
++ Choose training percent (default 20%)
++ Train 5 times and choose best option
++ Input data and get projected data back
++ Create tree model files (.dot)
++ Create learned instruction files (.joblib)
++ Importing/Exporting .joblib files</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>160</x><y>120</y><w>400</w><h>130</h></coordinates><panel_attributes>ervice 1
+--
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>430</x><y>260</y><w>310</w><h>180</h></coordinates><panel_attributes>Service 2
+--
+bg=red</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>160</x><y>270</y><w>260</w><h>110</h></coordinates><panel_attributes>Service 3
+--
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>170</x><y>300</y><w>240</w><h>70</h></coordinates><panel_attributes>_object: Class_
+--
++ Importing/Exporting .joblib files
++ Input data and get projected data back
+
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>
