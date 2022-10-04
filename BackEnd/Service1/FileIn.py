@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request
+from flask import Flask, request
 import pandas as pd
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ def remove_nulls(file) -> dict:
     return df.to_json()
 
 
-#TODO flask endpoint here, make sure to use pd.to_csv to return the csv file
+#keeps the file name and data together
 @app.route('/cleanCSV', methods=['POST'])
 def clean_data():
     file_name: str = request.files["dirty_csv"].filename
