@@ -12,9 +12,9 @@ test_data: dict = {
 }
 
 #main composer method, takes in everything and then distributes to other methods
-def run_time(data_json: dict, output_field: str, model_type: int):
+def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int):
     df = data_intake(data_json)
-    model = create_model(df= df, output_field=output_field, model_type=model_type)
+    model = create_model(df= df, output_field=output_field, model_type=model_type, t_percent=training_percent, min_acc=min_acc)
 
 #TODO swap this in flask to intake the csv file, send it to be cleaned and then get it back
 def data_intake(data_json: dict) -> pd.DataFrame:
@@ -24,9 +24,23 @@ def data_intake(data_json: dict) -> pd.DataFrame:
     return df
 
 #model type 0 = classifier, model type 1 = regressions
-def create_model(df: pd.DataFrame, output_field: str, model_type: str):
-    #TODO input and output, tree type, model creating
-    pass
+def create_model(df: pd.DataFrame, output_field: str, model_type: str, t_percent: int, min_acc: int):
+    X = df.drop(columns=[output_field]) #input set
+    y = df[output_field] #output set
+    if model_type == 0: #classifier
+        model = DecisionTreeClassifier()
+    elif model_type == 0: #regression
+        model = DecisionTreeRegressor()
+    #no else statement, stretch goal is adding more types
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=(t_percent/100))
+    min_acc_percent: float = (min_acc//100)
+    for i in range(0,10): #loop until desired accuracy is achieved, or until tested 10 times
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        score = accuracy_score(y_test, predictions)
+        if score >= min_acc_percent:
+            break
+    #TODO export the saved training .joblib
     
 
-run_time(data_json=test_data, output_field='genre', model_type=0)
+run_time(data_json=test_data, output_field='genre', model_type=0, training_percent=20, min_acc=75)

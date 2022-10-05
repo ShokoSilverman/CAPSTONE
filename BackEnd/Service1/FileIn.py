@@ -19,7 +19,6 @@ def clean_data():
     file_name: str = request.files["dirty_csv"].filename
     dirty_csv = request.files["dirty_csv"]
     clean_dict = {file_name : remove_nulls(dirty_csv)}
-    print(type(clean_dict[file_name]))
     return clean_dict
 
 
