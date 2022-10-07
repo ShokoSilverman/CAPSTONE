@@ -11,11 +11,6 @@ import os
 from flask import Flask, request, Response
 import requests
 
-#delete this soon
-test_data: dict = {
-    "music.csv": "{\"age\":{\"0\":20,\"1\":23,\"2\":25,\"3\":26,\"4\":29,\"5\":30,\"6\":31,\"7\":33,\"8\":37,\"9\":20,\"10\":21,\"11\":25,\"12\":26,\"13\":27,\"14\":30,\"15\":31,\"16\":34,\"17\":35},\"gender\":{\"0\":1,\"1\":1,\"2\":1,\"3\":1,\"4\":1,\"5\":1,\"6\":1,\"7\":1,\"8\":1,\"9\":0,\"10\":0,\"11\":0,\"12\":0,\"13\":0,\"14\":0,\"15\":0,\"16\":0,\"17\":0},\"genre\":{\"0\":\"HipHop\",\"1\":\"HipHop\",\"2\":\"HipHop\",\"3\":\"Jazz\",\"4\":\"Jazz\",\"5\":\"Jazz\",\"6\":\"Classical\",\"7\":\"Classical\",\"8\":\"Classical\",\"9\":\"Dance\",\"10\":\"Dance\",\"11\":\"Dance\",\"12\":\"Acoustic\",\"13\":\"Acoustic\",\"14\":\"Acoustic\",\"15\":\"Classical\",\"16\":\"Classical\",\"17\":\"Classical\"}}"
-}
-
 app = Flask(__name__)
 
 #TODO CHANGE THIS TO USE ENVIRON VARIABLES
@@ -88,7 +83,6 @@ def create_model():
     clean_data = (requests.get('http://localhost:8080/cleanCSV', files={'dirty_csv':dirty_csv}).json())['clean_csv']
     output_field: str = request.form.get('output_field')
     model_type: int = int(request.form.get('model_type'))
-    #TODO add a check here, if model type 1 (regression) all data needs to be numbers!!!
     training_percent: int = int(request.form.get('training_percent'))
     min_acc: int = int(request.form.get('min_acc'))
     try:
