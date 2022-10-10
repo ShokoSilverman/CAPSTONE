@@ -10,6 +10,7 @@ from bson.binary import Binary
 import os
 from flask import Flask, request, Response
 import requests
+from subprocess import call
 
 app = Flask(__name__)
 
@@ -20,7 +21,7 @@ col = db['ModelFiles']
 
 #main composer method, takes in everything and then distributes to other methods
 def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int): #returns the inserted ID
-    df, data_set = data_intake(data_json)
+    df = data_intake(data_json)
     df:pd.DataFrame = df
     #check regression for nums
     if model_type == 1:
@@ -33,10 +34,12 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
     joblib.dump(model, 'model.joblib')
     with open('model.joblib', "rb") as f:
         model_info = Binary(f.read())
-    with open('graph.dot', "rb") as f:
+    call(['dot', '-Tpng', 'graph.dot', '-o', 'tree.png'])
+    with open('tree.png', "rb") as f:
         graph_info = Binary(f.read())
-    inserted = col.insert_one({'data_set': data_set, 'training': model_info, 'graph':graph_info})
+    inserted = col.insert_one({'training': model_info, 'graph':graph_info})
     os.remove('graph.dot')
+    os.remove('tree.png')
     os.remove('model.joblib')
     return inserted.inserted_id
 
@@ -45,11 +48,9 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
 #TODO swap this in flask to intake the csv file, send it to be cleaned and then get it back
 def data_intake(data_json: dict) -> pd.DataFrame:
     clean_data: dict = data_json #swap this to call service 1 and clean
-    # file_name: str = list(data_json.keys())[0]
-    # df = pd.read_json(clean_data[file_name])
     df = pd.read_json(clean_data)
     print(df.head(10))
-    return df, clean_data
+    return df
 
 #model type 0 = classifier, model type 1 = regressions
 def create_new_model(df: pd.DataFrame, output_field: str, model_type: str, t_percent: int, min_acc: int):
