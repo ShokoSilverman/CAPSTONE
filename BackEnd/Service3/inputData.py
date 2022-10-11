@@ -1,17 +1,17 @@
-from flask import Flask, request, Response
-import pandas as pd
+from flask import Flask, request
 import pymongo
 from bson.objectid import ObjectId
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-import sklearn.externals
 import joblib
-from sklearn import tree
 import os
 
 
-client = pymongo.MongoClient("mongodb+srv://ShokoCapstone:U5bjze5RVZsHiLn5@capstone.qawfukq.mongodb.net/?retryWrites=true&w=majority")
+DB_USER = os.environ.get('DB_USERNAME')
+DB_PASS = os.environ.get('DB_PASSWORD')
+
+DB_USER = DB_USER if DB_USER is not None else 'ShokoCapstone' #take these out before prod
+DB_PASS = DB_PASS if DB_PASS is not None else 'U5bjze5RVZsHiLn5'
+
+client = pymongo.MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@capstone.qawfukq.mongodb.net/?retryWrites=true&w=majority")
 db = client['Capstone']
 col = db['ModelFiles']
 

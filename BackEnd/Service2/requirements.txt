@@ -1,5 +1,6 @@
 sklearn
 pandas
 joblib
-mongo[srv]
+pymongo[srv]
 flask
+requests
