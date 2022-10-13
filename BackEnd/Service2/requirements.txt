@@ -4,3 +4,4 @@ joblib
 pymongo[srv]
 flask
 requests
+py_eureka_client

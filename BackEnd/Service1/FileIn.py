@@ -1,7 +1,12 @@
 from flask import Flask, request
 import pandas as pd
+import py_eureka_client.eureka_client as eureka_client
 
 app = Flask(__name__)
+your_rest_server_port = 8080
+eureka_client.init(eureka_server="http://eureka:8761/eureka",
+                                app_name="cleanerapi",
+                                instance_port=your_rest_server_port)
 
 #clean up any null values in the csv (replace or delete them) (deleting them for now, will come back to replace with means/medians)
 #should return a valid and clean json version of the dataframe

@@ -5,9 +5,15 @@ ENV DB_PASS='U5bjze5RVZsHiLn5'
 
 ADD mainLearning.py .
 
+RUN python -m pip cache purge
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-EXPOSE 8081 8081
+RUN apt-get update -y
+RUN apt-get install -y graphviz
+# RUN apt install graphviz
 
+# EXPOSE 8081 8081
+
+# ENTRYPOINT [ "/bin/bash", "./installProg.sh" ]
 CMD [ "python", "./mainLearning.py", "flask"]

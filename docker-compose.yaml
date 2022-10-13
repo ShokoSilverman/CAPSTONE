@@ -5,6 +5,25 @@ networks:
     external: false
 
 services:
+  eureka:
+    container_name: eureka
+    image: steeltoeoss/eureka-server:latest
+    networks:
+      - shokocapstone
+    ports:
+      - '8761:8761'
+    restart: always
+
+  gateway:
+    container_name: gateway
+    image: ssilverman23/capstone:latest
+    networks:
+      - shokocapstone
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka
+
   file-cleanup:
     build:
       context: ./BackEnd/Service1
@@ -12,8 +31,8 @@ services:
     image: file-cleanup
     networks:
       - shokocapstone
-    ports:
-      - "8080:8080"
+    # ports:
+      # - "8080:8080"
   # deploy:
   #     replicas : 3
   #     restart_policy:
@@ -55,3 +74,4 @@ services:
   #       delay: 5s
   #       max_attempts: 3
   #       window: 120s
+

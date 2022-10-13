@@ -1,2 +1,3 @@
 flask
 pandas
+py_eureka_client
