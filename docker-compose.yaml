@@ -33,13 +33,13 @@ services:
       - shokocapstone
     # ports:
       # - "8080:8080"
-  # deploy:
-  #     replicas : 3
-  #     restart_policy:
-  #       condition: on-failure
-  #       delay: 5s
-  #       max_attempts: 3
-  #       window: 120s
+    deploy:
+        replicas : 3
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
 
   main-learning:
     build:
@@ -48,15 +48,15 @@ services:
     image: main-learning
     networks:
       - shokocapstone
-    ports:
-      - "8081:8081"
-  # deploy:
-  #     replicas : 3
-  #     restart_policy:
-  #       condition: on-failure
-  #       delay: 5s
-  #       max_attempts: 3
-  #       window: 120s
+    # ports:
+    #   - "8081:8081"
+    deploy:
+        replicas : 3
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
 
   use-model:
     build:
@@ -65,13 +65,13 @@ services:
     image: use-model
     networks:
       - shokocapstone
-    ports:
-      - "8082:8082"
-  # deploy:
-  #     replicas : 3
-  #     restart_policy:
-  #       condition: on-failure
-  #       delay: 5s
-  #       max_attempts: 3
-  #       window: 120s
+    # ports:
+    #   - "8082:8082"
+    deploy:
+        replicas : 3
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
 

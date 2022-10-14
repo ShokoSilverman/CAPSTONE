@@ -11,8 +11,13 @@ import os
 from flask import Flask, request, Response
 import requests
 from subprocess import call
+import py_eureka_client.eureka_client as eureka_client
 
 app = Flask(__name__)
+your_rest_server_port = 8081
+eureka_client.init(eureka_server="http://eureka:8761/eureka",
+                                app_name="mainlearningapi",
+                                instance_port=your_rest_server_port)
 
 DB_USER = os.environ.get('DB_USERNAME')
 DB_PASS = os.environ.get('DB_PASSWORD')
@@ -86,7 +91,8 @@ def create_new_model(df: pd.DataFrame, output_field: str, model_type: str, t_per
 @app.route('/createModel', methods=['POST'])
 def create_model():
     dirty_csv = request.files["dirty_csv"]
-    clean_data = (requests.get('http://localhost:8080/cleanCSV', files={'dirty_csv':dirty_csv}).json())['clean_csv']
+    # clean_data = (requests.get('http://localhost:8080/cleanCSV', files={'dirty_csv':dirty_csv}).json())['clean_csv']
+    clean_data = (requests.get('http://gateway:8888/cleanerapi/cleanCSV', files={'dirty_csv':dirty_csv}).json())['clean_csv']
     output_field: str = request.form.get('output_field')
     model_type: int = int(request.form.get('model_type'))
     training_percent: int = int(request.form.get('training_percent'))

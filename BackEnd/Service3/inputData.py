@@ -3,7 +3,7 @@ import pymongo
 from bson.objectid import ObjectId
 import joblib
 import os
-
+import py_eureka_client.eureka_client as eureka_client
 
 DB_USER = os.environ.get('DB_USERNAME')
 DB_PASS = os.environ.get('DB_PASSWORD')
@@ -16,6 +16,10 @@ db = client['Capstone']
 col = db['ModelFiles']
 
 app = Flask(__name__)
+your_rest_server_port = 8082
+eureka_client.init(eureka_server="http://eureka:8761/eureka",
+                                app_name="usemodelapi",
+                                instance_port=your_rest_server_port)
 
 #use the id to find the model, load it with pandas/sklearn, shoot back a result (stretch goal is letting user input multiple entries at once)
 def model_input(id: str, entered_data: list) -> list:
