@@ -1,9 +1,29 @@
 <script>
 	import Modal from './Modal.svelte';
 	let showModal = false;
+
 	const toggleModal = () => {
 		showModal = !showModal
 	}
+
+	let email;
+	let username;
+	let password;
+	let confPassword;
+	let passCheck = "";
+	
+	const isSamePass = () =>{
+		if (password != confPassword){
+			passCheck = "Passwords do not match!"
+		}else{
+			passCheck = ""
+		}
+	}
+
+	const register = () => {
+		
+	};
+
 </script>
 
 <Modal showModal={showModal} on:click={toggleModal}>
@@ -11,15 +31,15 @@
 
 	</form>
 	<form>
-		<input type="text" name="" id="" placeholder="Email">
+		<input type="text" name="" id="" placeholder="Email" bind:value={email}>
 		<br>
-		<input type="text" name="" id="" placeholder="Username">
+		<input type="text" name="" id="" placeholder="Username" bind:value={username}>
 		<br>
-		<input type="text" name="" id="" placeholder="Password">
+		<input type="password" name="" id="" placeholder="Password" bind:value={password}>
 		<br>
-		<input type="text" name="" id="" placeholder="Confirm Password">
+		<input type="text" name="" id="checkPass" placeholder="Confirm Password" bind:value={confPassword} on:focusout={isSamePass}><p id="passConf">{passCheck}</p>
 		<br>
-		<button>Register</button>
+		<button on:click={register}>Register</button>
 	</form>
 </Modal>
 <main>
@@ -61,6 +81,11 @@
 		top: 1.5%;
 		right: 1%;
 	}
+
+	#passConf{
+        color:red;
+        font-size: 80%;
+    }
 
 
 </style>
