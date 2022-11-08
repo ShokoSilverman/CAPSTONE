@@ -3,7 +3,12 @@
 	let showModal = false;
 
 	const toggleModal = () => {
+		let button = document.getElementById('signModal');
+		if(button.style.visibility == 'hidden'){
+			document.getElementById('signModal').style.visibility = 'visible';
+		}else document.getElementById('signModal').style.visibility = 'hidden';
 		showModal = !showModal
+		
 	}
 
 	let email;
@@ -21,26 +26,41 @@
 	}
 
 	const register = () => {
+		let pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+		if (passCheck == "Passwords do not match!") return;
+		if (pattern.test(password)){
+			console.log('good pass')
+		}else {
+			console.log('bad pass')
+		}
 		
 	};
+
 
 </script>
 
 <Modal showModal={showModal} on:click={toggleModal}>
-	<form>
-
-	</form>
-	<form>
-		<input type="text" name="" id="" placeholder="Email" bind:value={email}>
-		<br>
-		<input type="text" name="" id="" placeholder="Username" bind:value={username}>
-		<br>
-		<input type="password" name="" id="" placeholder="Password" bind:value={password}>
-		<br>
-		<input type="text" name="" id="checkPass" placeholder="Confirm Password" bind:value={confPassword} on:focusout={isSamePass}><p id="passConf">{passCheck}</p>
-		<br>
-		<button on:click={register}>Register</button>
-	</form>
+	<div id='flex-form'>
+		<form id='login'>
+			<input type="text" name="" id="" placeholder="Email" bind:value={email}>
+			<br>
+			<input type="password" name="" id="" placeholder="Password" bind:value={password} on:focusout={isSamePass}>
+			<br>
+			<button>Login</button>
+		</form>
+		<div id='bar'></div>
+		<form id='register'>
+			<input type="text" name="" id="" placeholder="Email" bind:value={email}>
+			<br>
+			<input type="text" name="" id="" placeholder="Username" bind:value={username}>
+			<br>
+			<input type="password" name="" id="" placeholder="Password" bind:value={password} on:focusout={isSamePass}>
+			<br>
+			<input type="password" name="" id="checkPass" placeholder="Confirm Password" bind:value={confPassword} on:focusout={isSamePass}><p id="passConf">{passCheck}</p>
+			<br>
+			<button on:click|preventDefault={register}>Register</button>
+		</form>
+	</div>
 </Modal>
 <main>
 	<button on:click={toggleModal} id="signModal">Login/Sign Up</button>
@@ -86,6 +106,23 @@
         color:red;
         font-size: 80%;
     }
+
+	#flex-form{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+	}
+
+	#signModal{
+		visibility: visible;
+	}
+
+	#bar{
+		width: 0.5%;
+		background: orange;
+	}
+
+
 
 
 </style>
