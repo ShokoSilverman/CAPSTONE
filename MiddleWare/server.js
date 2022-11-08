@@ -24,6 +24,7 @@ app.use(express.static('public'));
 
 
 app.get('/', routes.root);
+app.get('/getAllModels', routes.getAllModels);
 
 
 
