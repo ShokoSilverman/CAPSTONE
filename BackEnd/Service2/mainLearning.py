@@ -30,7 +30,7 @@ db = client['Capstone']
 col = db['ModelFiles']
 
 #main composer method, takes in everything and then distributes to other methods
-def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int): #returns the inserted ID
+def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int, name: str): #returns the inserted ID
     df = data_intake(data_json)
     df:pd.DataFrame = df
     #check regression for nums
@@ -47,7 +47,7 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
     call(['dot', '-Tpng', 'graph.dot', '-o', 'tree.png'])
     with open('tree.png', "rb") as f:
         graph_info = Binary(f.read())
-    inserted = col.insert_one({'training': model_info, 'graph':graph_info})
+    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info})
     os.remove('graph.dot')
     os.remove('tree.png')
     os.remove('model.joblib')
@@ -97,8 +97,9 @@ def create_model():
     model_type: int = int(request.form.get('model_type'))
     training_percent: int = int(request.form.get('training_percent'))
     min_acc: int = int(request.form.get('min_acc'))
+    name: str = request.form.get('name')
     try:
-        id = run_time(data_json=clean_data, output_field=output_field, model_type=model_type, training_percent=training_percent, min_acc=min_acc)
+        id = run_time(data_json=clean_data, output_field=output_field, model_type=model_type, training_percent=training_percent, min_acc=min_acc, name=name)
     except ValueError:
         return Response("{'Value Error' : 'all regression values must be numeric'}", status=400, mimetype='application/json')
     return str(id)
