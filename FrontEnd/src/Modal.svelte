@@ -28,7 +28,7 @@
         padding: 1%;
         border-radius: 10px;
         border: 4px solid orange;
-        max-width: 500px;
+        max-width: 600px;
         /* margin: 10px auto; */
         margin: 18% auto;
         text-align: center;

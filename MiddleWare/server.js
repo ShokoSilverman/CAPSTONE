@@ -20,11 +20,17 @@ app.use(cors());
 
 app.use(express.static('public'));
 
+const urlencodedParser = express.urlencoded({
+   extended: false
+})
 
+app.use(express.json());
 
 
 app.get('/', routes.root);
 app.get('/getAllModels', routes.getAllModels);
+app.post('/createUser', routes.createUser);
+app.post('/login', routes.login);
 
 
 

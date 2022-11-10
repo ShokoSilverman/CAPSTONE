@@ -11,11 +11,16 @@
 		
 	}
 
-	let email;
-	let username;
-	let password;
-	let confPassword;
+	let email = "";
+	let username = "";
+	let password = "";
+	let confPassword = "";
 	let passCheck = "";
+
+
+	let logEmail = "";
+	let logPassword = "";
+	let logResponse = "";
 	
 	const isSamePass = () =>{
 		if (password != confPassword){
@@ -26,15 +31,62 @@
 	}
 
 	const register = () => {
+		if (email.trim() == "" || username.trim() == "" || password.trim() == ""){
+			passCheck = "Please fill in all fields!";
+			return;
+		}
 		let pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 		if (passCheck == "Passwords do not match!") return;
-		if (pattern.test(password)){
-			console.log('good pass')
-		}else {
-			console.log('bad pass')
+		if (!pattern.test(password)){
+			passCheck += "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number."
+			return
 		}
 		
+		//use the xml request handler to send a post
+		passCheck = "loading..."
+		let newUser = JSON.stringify({'_id':email, username,password});
+        const request = new XMLHttpRequest();
+        request.open("POST", "http://localhost:5000/createUser");
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+        request.send(newUser);
+        request.onload = () =>{
+			if(request.responseText == 1){
+				//handle log in stuff here
+			}else{
+				passCheck = request.responseText;
+			}
+        }
+
 	};
+
+	const login = () =>{
+		let logUser = JSON.stringify({"email":logEmail, "password":logPassword});
+		console.log(logUser)
+		logResponse = "Logging in..."
+        const request = new XMLHttpRequest();
+        request.open("POST", "http://localhost:5000/login");
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+        request.send(logUser);
+        request.onload = () =>{
+			logResponse = request.responseText;
+			//if successful hit a log in method with the username and email items returned to you
+        }
+	}
+
+
+
+	const populateModels = (model) => {
+		document.getElementById('allModels').innerHTML += `<p>${model.id} --- ${model.name}</p><br>`;
+	}
+
+	const getModels = async () => {
+		const response = await fetch("http://localhost:5000/getAllModels");
+		const data = await response.json();
+		document.getElementById('allModels').innerText = ""
+		data.forEach(populateModels);
+	};
+
+	getModels();
 
 
 </script>
@@ -42,21 +94,23 @@
 <Modal showModal={showModal} on:click={toggleModal}>
 	<div id='flex-form'>
 		<form id='login'>
-			<input type="text" name="" id="" placeholder="Email" bind:value={email}>
+			<input type="text" name="email" id="logEmail" placeholder="Email" bind:value={logEmail}>
 			<br>
-			<input type="password" name="" id="" placeholder="Password" bind:value={password} on:focusout={isSamePass}>
+			<input type="text" name="password" id="logPassword" placeholder="Password" bind:value={logPassword}>
+			<p class="passConf">{logResponse}</p>
 			<br>
-			<button>Login</button>
+			<button on:click|preventDefault={login}>Login</button>
 		</form>
 		<div id='bar'></div>
 		<form id='register'>
-			<input type="text" name="" id="" placeholder="Email" bind:value={email}>
+			<input type="text" name="email" id="email" placeholder="Email" bind:value={email}>
 			<br>
-			<input type="text" name="" id="" placeholder="Username" bind:value={username}>
+			<input type="text" name="username" id="username" placeholder="Username" bind:value={username}>
 			<br>
-			<input type="password" name="" id="" placeholder="Password" bind:value={password} on:focusout={isSamePass}>
+			<input type="password" name="password" id="password" placeholder="Password" bind:value={password} on:focusout={isSamePass}>
 			<br>
-			<input type="password" name="" id="checkPass" placeholder="Confirm Password" bind:value={confPassword} on:focusout={isSamePass}><p id="passConf">{passCheck}</p>
+			<input type="password" name="checkpass" id="checkPass" placeholder="Confirm Password" bind:value={confPassword} on:focusout={isSamePass}>
+			<p class="passConf">{passCheck}</p>
 			<br>
 			<button on:click|preventDefault={register}>Register</button>
 		</form>
@@ -67,6 +121,8 @@
 	<h1>Welcome to ML-Silver</h1>
 	<h4>ML-Silver's creator had one goal in mind:</h4>
 	<h4>Bringing machine learning to the everyday person, and make it as easy as possible.</h4>
+
+	<div id=allModels>"Loading Values..."</div>
 </main>
 
 <style>
@@ -102,9 +158,10 @@
 		right: 1%;
 	}
 
-	#passConf{
+	.passConf{
         color:red;
-        font-size: 80%;
+        font-size: 70%;
+		/* height: 10%; */
     }
 
 	#flex-form{
