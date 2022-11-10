@@ -3,7 +3,7 @@
 <script>
 	import Home from './Home.svelte';
 	import SecondPage from './secondpage.svelte';
-	import NotFound from './NoutFound.svelte';
+	import NotFound from './NotFound.svelte';
 
 	//routing
 

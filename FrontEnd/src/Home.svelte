@@ -1,10 +1,11 @@
 <script>
 	import Modal from './Modal.svelte';
-
-
+    import Sidebar from './sidebar.svelte';
+	import sidebar from './sidebar.svelte';
 
 
 	let showModal = false;
+	let showSideBar = false;
 
 	const toggleModal = () => {
 		showModal = !showModal;
@@ -12,8 +13,10 @@
 		if(button.style.visibility == 'hidden'){
 			document.getElementById('signModal').style.visibility = 'visible';
 		}else document.getElementById('signModal').style.visibility = 'hidden';
-		
-		
+	}
+
+	const toggleShowBar = () => {
+		showSideBar = !showSideBar;
 	}
 
 	let email = "";
@@ -145,9 +148,12 @@
 		</div>
 	</Modal>
 {/if}
+<Sidebar showSideBar={showSideBar}>
+
+</Sidebar>
 <main>
 	{#if isLoggedIn}
-	<p id=curUser>{loggedUser}</p>
+	<p id=curUser on:click={toggleShowBar}>{loggedUser}</p>
 	{:else}
 	<button on:click={toggleModal} id="signModal">Login/Sign Up</button>
 	{/if}
@@ -215,8 +221,9 @@
 		top: 1.5%;
 		right: 1%;
 		color: orange;
-		font-size: 150%;
+		font-size: 200%;
 		cursor: pointer;
+		user-select: none;
 	}
 
 </style>
