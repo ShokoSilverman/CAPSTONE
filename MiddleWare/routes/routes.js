@@ -23,7 +23,7 @@ exports.getAllModels = async(req, res) => {
     // for (let i = 0; i < findResult.length; i++) {
     //     names.push({"id" : findResult[i] "name" : findResult[i].name});
     // }
-    findResult.forEach((item) => {results.push({"id" : item._id, "name" : item.name})});
+    findResult.forEach((item) => {results.push({"_id" : item._id, "name" : item.name})});
     client.close();
     res.send(results);
 }
@@ -43,14 +43,11 @@ exports.createUser = async(req, res) => {
 
 exports.login = async(req, res) => {
     await client.connect();
-    console.log(req.body);
-    console.log(req.body.email);
-    console.log(req.body.password);
     const findResult = await userCollection.findOne({"_id": req.body.email, "password": req.body.password});
     client.close();
     if(findResult == null) {
         res.send("Incorrect email or password");
     } else {
-        res.send("Login successful");
+        res.send(findResult);
     }
 }
