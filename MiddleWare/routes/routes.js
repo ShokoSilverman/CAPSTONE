@@ -20,9 +20,6 @@ exports.getAllModels = async(req, res) => {
     const findResult = await modelCollection.find({}).toArray();
     // const findResult = await modelCollection.project({ name: 1 }).toArray();
     let results = [];
-    // for (let i = 0; i < findResult.length; i++) {
-    //     names.push({"id" : findResult[i] "name" : findResult[i].name});
-    // }
     findResult.forEach((item) => {results.push({"_id" : item._id, "name" : item.name})});
     client.close();
     res.send(results);

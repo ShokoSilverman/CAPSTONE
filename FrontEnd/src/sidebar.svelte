@@ -28,7 +28,9 @@
         z-index: 1; /* Stay on top */
         top: 0; /* Stay at the top */
         right: 0;
-        background-color: white; /* Black */
+        /* background-color: rgba(76, 80, 94, 1); */
+        background-color: white;
+        /* background-color: #303642; */
         overflow-x: hidden; /* Disable horizontal scroll */
         padding-top: 20px;
     }

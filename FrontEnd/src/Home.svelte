@@ -3,6 +3,8 @@
     import Sidebar from './sidebar.svelte';
 	import sidebar from './sidebar.svelte';
 
+	export let params;
+	let modelList = params.models;
 
 	let showModal = false;
 	let showSideBar = false;
@@ -93,30 +95,19 @@
 		loggedEmail = em;
 		isLoggedIn = true;
 		showModal = false;
+		document.cookie = JSON.stringify({loggedUser, loggedEmail})
 	}
 
 
-
-
-
-	const populateModels = (model) => {
-		document.getElementById('allModels').innerHTML += `<p>${model._id} --- ${model.name}</p><br>`;
+	const onLoad = () =>{
+		try{
+		let userObj = JSON.parse(document.cookie)
+		doLogin(userObj.loggedUser, userObj.loggedEmail)
+		}
+		catch(error){}
 	}
 
-	let allModels = [];
-
-	const getModels = async () => {
-		const response = await fetch("http://localhost:5000/getAllModels");
-		const data = await response.json();
-		document.getElementById('allModels').innerText = ""
-		data.forEach(populateModels);
-		data.forEach((model) => {
-			allModels.push(model);
-			console.log(allModels.length);
-		});
-	};
-
-	getModels();
+	onLoad()
 
 
 </script>
@@ -161,8 +152,12 @@
 	<h4>ML-Silver's creator had one goal in mind:</h4>
 	<h4>Bringing machine learning to the everyday person, and make it as easy as possible.</h4>
 
-	<div id=allModels>"Loading Values..."</div>
+	<!-- <div>{models}</div> -->
+	{#each modelList as model (model._id)}
+		<p>{model.name} {model._id}</p>
+	{/each}
 </main>
+
 
 <style>
 	main {
@@ -224,6 +219,12 @@
 		font-size: 200%;
 		cursor: pointer;
 		user-select: none;
+		text-decoration: underline;
+		text-decoration-thickness: 3%;
+	}
+
+	#curUser:hover{
+		color: rgb(190, 123, 0);
 	}
 
 </style>
