@@ -4,6 +4,8 @@ from bson.objectid import ObjectId
 import joblib
 import os
 import py_eureka_client.eureka_client as eureka_client
+from flask_cors import CORS, cross_origin
+
 
 DB_USER = os.environ.get('DB_USERNAME')
 DB_PASS = os.environ.get('DB_PASSWORD')
@@ -16,6 +18,9 @@ db = client['Capstone']
 col = db['ModelFiles']
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 your_rest_server_port = 8082
 eureka_client.init(eureka_server="http://eureka:8761/eureka",
                                 app_name="usemodelapi",
@@ -34,6 +39,7 @@ def model_input(id: str, entered_data: list) -> list:
 
 
 @app.route('/useModel', methods=['GET'])
+@cross_origin()
 def use_model():
     id: str = request.form.get('id')
     entered_data: list = str(request.form.get('entered_data')).split(',')

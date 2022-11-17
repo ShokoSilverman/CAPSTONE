@@ -1,12 +1,18 @@
 <script>
     export let showSideBar = false;
+
+    const createModelClick = () =>{
+        window.location.href = 'http://localhost:8080/ModelCreation';
+    }
+
 </script>
 
 {#if showSideBar}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="backdrop" on:click|self> <!--this is an event modifier and a passed event-->
-        <div id="sidebar">
-            <slot></slot>
+        <div id="sidebar" style="padding-top: 5%;">
+            <br>
+            <p on:click={createModelClick}>Create Model</p>
         </div>
     </div>
 {/if}
@@ -33,5 +39,17 @@
         /* background-color: #303642; */
         overflow-x: hidden; /* Disable horizontal scroll */
         padding-top: 20px;
+    }
+
+    #sidebar p {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #303642;
+    display: block;
+    }
+
+    #sidebar p:hover {
+    cursor: pointer;
     }
 </style>

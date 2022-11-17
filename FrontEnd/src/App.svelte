@@ -2,19 +2,13 @@
 
 <script>
 	import Home from './Home.svelte';
-	import SecondPage from './secondpage.svelte';
+	import ModelCreation from './ModelCreation.svelte';
 	import NotFound from './NotFound.svelte';
 
 	const getAllModels = async () => {
 		const response = await fetch("http://localhost:5000/getAllModels");
 		const data = await response.json();
 		return data;
-	};
-
-
-	//how to redirect
-	const secondPage = () =>{
-		window.location.href = 'http://localhost:8080/secondpage';
 	};
 
 	//routing
@@ -38,13 +32,14 @@
 	},
 	() => (page=Home)
 	);
-	router('/secondpage',
+	//make this the create model page
+	router('/ModelCreation/',
 	(ctx, next) => {
-		params = ctx.params;
-		// params = {"test":"test1"}
+		let userObj = JSON.parse(document.cookie);
+		params = {"LoggedUser": userObj.loggedUser, "LoggedEmail": userObj.loggedEmail};
 		next();
 	},
-	() => (page=SecondPage)
+	() => (page=ModelCreation)
 	);
 	router('/*', () => (page=NotFound));
 

@@ -119,3 +119,18 @@ button:not(:disabled):active {
 button:focus {
 	border-color: #666;
 }
+
+.curUser{
+	position: absolute;
+	top: 1.5%;
+	right: 1%;
+	color: orange;
+	font-size: 200%;
+	cursor: pointer;
+	user-select: none;
+	text-decoration: underline;
+	text-decoration-thickness: 3%;
+}
+.curUser:hover{
+	color: rgb(190, 123, 0);
+}

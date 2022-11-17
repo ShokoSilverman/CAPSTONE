@@ -5,3 +5,4 @@ pymongo[srv]
 flask
 requests
 py_eureka_client
+Flask-Cors

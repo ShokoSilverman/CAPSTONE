@@ -1,3 +1,4 @@
 flask
 pandas
 py_eureka_client
+Flask-Cors

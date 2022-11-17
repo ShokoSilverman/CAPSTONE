@@ -1,7 +1,6 @@
 <script>
 	import Modal from './Modal.svelte';
     import Sidebar from './sidebar.svelte';
-	import sidebar from './sidebar.svelte';
 
 	export let params;
 	let modelList = params.models;
@@ -139,12 +138,10 @@
 		</div>
 	</Modal>
 {/if}
-<Sidebar showSideBar={showSideBar}>
-
-</Sidebar>
+<Sidebar showSideBar={showSideBar}></Sidebar>
 <main>
 	{#if isLoggedIn}
-	<p id=curUser on:click={toggleShowBar}>{loggedUser}</p>
+	<p class=curUser on:click={toggleShowBar}>{loggedUser}</p>
 	{:else}
 	<button on:click={toggleModal} id="signModal">Login/Sign Up</button>
 	{/if}
@@ -211,20 +208,6 @@
 		background: orange;
 	}
 
-	#curUser{
-		position: absolute;
-		top: 1.5%;
-		right: 1%;
-		color: orange;
-		font-size: 200%;
-		cursor: pointer;
-		user-select: none;
-		text-decoration: underline;
-		text-decoration-thickness: 3%;
-	}
-
-	#curUser:hover{
-		color: rgb(190, 123, 0);
-	}
+	
 
 </style>

@@ -12,8 +12,14 @@ from flask import Flask, request, Response
 import requests
 from subprocess import call
 import py_eureka_client.eureka_client as eureka_client
+from datetime import date
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 your_rest_server_port = 8081
 eureka_client.init(eureka_server="http://eureka:8761/eureka",
                                 app_name="mainlearningapi",
@@ -30,7 +36,7 @@ db = client['Capstone']
 col = db['ModelFiles']
 
 #main composer method, takes in everything and then distributes to other methods
-def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int, name: str): #returns the inserted ID
+def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int, name: str, is_private: bool, user: str, user_email: str, description: str): #returns the inserted ID
     df = data_intake(data_json)
     df:pd.DataFrame = df
     #check regression for nums
@@ -47,7 +53,7 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
     call(['dot', '-Tpng', 'graph.dot', '-o', 'tree.png'])
     with open('tree.png', "rb") as f:
         graph_info = Binary(f.read())
-    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info})
+    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_columns':input_cols})
     os.remove('graph.dot')
     os.remove('tree.png')
     os.remove('model.joblib')
@@ -65,6 +71,8 @@ def data_intake(data_json: dict) -> pd.DataFrame:
 #model type 0 = classifier, model type 1 = regressions
 def create_new_model(df: pd.DataFrame, output_field: str, model_type: str, t_percent: int, min_acc: int):
     X = df.drop(columns=[output_field]) #input set #can not change the variable name on these, library wont work without it
+    # input_cols: list = X.columns
+    # print('---------------------------', input_cols, '--------------------------------', sep='\n')
     y = df[output_field] #output set
     if model_type == 0: #classifier
         model = DecisionTreeClassifier()
@@ -89,17 +97,24 @@ def create_new_model(df: pd.DataFrame, output_field: str, model_type: str, t_per
 
 
 @app.route('/createModel', methods=['POST'])
+@cross_origin()
 def create_model():
     dirty_csv = request.files["dirty_csv"]
     # clean_data = (requests.get('http://localhost:8080/cleanCSV', files={'dirty_csv':dirty_csv}).json())['clean_csv']
     clean_data = (requests.get('http://gateway:8888/cleanerapi/cleanCSV', files={'dirty_csv':dirty_csv}).json())['clean_csv']
+    # data: dict = request.json()
     output_field: str = request.form.get('output_field')
     model_type: int = int(request.form.get('model_type'))
     training_percent: int = int(request.form.get('training_percent'))
     min_acc: int = int(request.form.get('min_acc'))
     name: str = request.form.get('name')
+    #add ins from front end
+    is_private: bool = bool(int(request.form.get('is_private')))
+    user: str = request.form.get('user')
+    user_email: str = request.form.get('user_email')
+    description: str = request.form.get('description')
     try:
-        id = run_time(data_json=clean_data, output_field=output_field, model_type=model_type, training_percent=training_percent, min_acc=min_acc, name=name)
+        id = run_time(data_json=clean_data, output_field=output_field, model_type=model_type, training_percent=training_percent, min_acc=min_acc, name=name, is_private=is_private, user=user, user_email=user_email, description=description)
     except ValueError:
         return Response("{'Value Error' : 'all regression values must be numeric'}", status=400, mimetype='application/json')
     return str(id)
