@@ -4,9 +4,17 @@
 	import Home from './Home.svelte';
 	import ModelCreation from './ModelCreation.svelte';
 	import NotFound from './NotFound.svelte';
+	import UseModel from './UseModel.svelte';
 
 	const getAllModels = async () => {
 		const response = await fetch("http://localhost:5000/getAllModels");
+		const data = await response.json();
+		return data;
+	};
+
+	const getModelById = async (id) => {
+		const response = await fetch(`http://localhost:5000/getById/${id}`);
+		// const response = await fetch(`http://localhost:5000/getById/63767433911301ea5e0a6fef`);
 		const data = await response.json();
 		return data;
 	};
@@ -31,6 +39,14 @@
 		next();
 	},
 	() => (page=Home)
+	);
+	router('/UseModel/:id',
+	async(ctx, next) => {
+		let model = await getModelById(ctx.params.id);
+		params = {"model": model}
+		next();
+	},
+	() => (page=UseModel)
 	);
 	//make this the create model page
 	router('/ModelCreation/',

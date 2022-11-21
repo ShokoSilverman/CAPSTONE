@@ -134,3 +134,13 @@ button:focus {
 .curUser:hover{
 	color: rgb(190, 123, 0);
 }
+
+.logo {
+	background: url("https://cdn.discordapp.com/attachments/1026984528276902018/1043193632620032072/unknown.png") no-repeat;
+	/* display: inline-block; */
+}
+.logo:hover {
+	background: url("https://cdn.discordapp.com/attachments/1026984528276902018/1043193591129964604/unknown.png") no-repeat;
+}
+
+

@@ -1,5 +1,4 @@
 const { ObjectID } = require("bson");
-const { response } = require("express");
 const {MongoClient, ObjectId} = require("mongodb");
 
 //const url = 'mongodb://localhost:27017'; //local
@@ -17,10 +16,10 @@ exports.root = async(req, res) => {
 
 exports.getAllModels = async(req, res) => {
     await client.connect();
-    const findResult = await modelCollection.find({}).toArray();
+    const findResult = await modelCollection.find({"is_private":false}).toArray();
     // const findResult = await modelCollection.project({ name: 1 }).toArray();
     let results = [];
-    findResult.forEach((item) => {results.push({"_id" : item._id, "name" : item.name})});
+    findResult.forEach((item) => {results.push({"id" : item._id, "name" : item.name, "createdBy" : item.user, 'description':item.description, 'dateCreated':item.dateCreated})});
     client.close();
     res.send(results);
 }
@@ -47,4 +46,12 @@ exports.login = async(req, res) => {
     } else {
         res.send(findResult);
     }
+}
+
+exports.getById = async(req, res) => {
+    await client.connect();
+    const findResult = await modelCollection.findOne({"_id":  ObjectID(req.params.id)});
+    // const findResult = await modelCollection.findOne({'name':'musicGenre'})
+    client.close();
+    res.send(findResult);
 }

@@ -140,6 +140,7 @@
 {/if}
 <Sidebar showSideBar={showSideBar}></Sidebar>
 <main>
+	<div class="logo" id="logoMainPage" on:click={()=>{window.open('https://www.linkedin.com/in/%F0%9F%90%8Dsimon-silverman-581443220/', '_blank');}}></div>
 	{#if isLoggedIn}
 	<p class=curUser on:click={toggleShowBar}>{loggedUser}</p>
 	{:else}
@@ -150,9 +151,17 @@
 	<h4>Bringing machine learning to the everyday person, and make it as easy as possible.</h4>
 
 	<!-- <div>{models}</div> -->
+
+	<div id="modelList">
 	{#each modelList as model (model._id)}
-		<p>{model.name} {model._id}</p>
+		<p>{model.id}</p>
+		<p>{model.name}</p>
+		<p>{model.createdBy}</p>
+		<p>{model.dateCreated}</p>
+		<p class="modelDescription" title={model.description}>{model.description}</p>
+		<br>
 	{/each}
+	</div>
 </main>
 
 
@@ -162,6 +171,7 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+		user-select: none;
 	}
 
 	h1 {
@@ -206,6 +216,23 @@
 	#bar{
 		width: 0.5%;
 		background: orange;
+	}
+
+	#logoMainPage{
+		width: 467px;
+		height: 241px;
+	}
+
+	#logoMainPage:hover{
+		cursor: pointer;
+	}
+
+	#modelList p{
+		display: inline-block;
+	}
+
+	.modelDescription{
+		overflow: hidden;
 	}
 
 	

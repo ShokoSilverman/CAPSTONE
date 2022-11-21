@@ -31,6 +31,7 @@ app.get('/', routes.root);
 app.get('/getAllModels', routes.getAllModels);
 app.post('/createUser', routes.createUser);
 app.post('/login', routes.login);
+app.get('/getById/:id', routes.getById);
 
 
 

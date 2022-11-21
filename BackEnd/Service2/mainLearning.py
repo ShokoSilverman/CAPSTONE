@@ -35,6 +35,8 @@ client = pymongo.MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@capstone.qawfuk
 db = client['Capstone']
 col = db['ModelFiles']
 
+global input_cols
+input_cols = []
 #main composer method, takes in everything and then distributes to other methods
 def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int, name: str, is_private: bool, user: str, user_email: str, description: str): #returns the inserted ID
     df = data_intake(data_json)
@@ -53,7 +55,7 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
     call(['dot', '-Tpng', 'graph.dot', '-o', 'tree.png'])
     with open('tree.png', "rb") as f:
         graph_info = Binary(f.read())
-    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_columns':input_cols})
+    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_cols':input_cols})
     os.remove('graph.dot')
     os.remove('tree.png')
     os.remove('model.joblib')
@@ -71,8 +73,8 @@ def data_intake(data_json: dict) -> pd.DataFrame:
 #model type 0 = classifier, model type 1 = regressions
 def create_new_model(df: pd.DataFrame, output_field: str, model_type: str, t_percent: int, min_acc: int):
     X = df.drop(columns=[output_field]) #input set #can not change the variable name on these, library wont work without it
-    # input_cols: list = X.columns
-    # print('---------------------------', input_cols, '--------------------------------', sep='\n')
+    global input_cols
+    input_cols = [str(i) for i in X.columns]
     y = df[output_field] #output set
     if model_type == 0: #classifier
         model = DecisionTreeClassifier()

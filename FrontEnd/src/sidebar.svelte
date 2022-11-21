@@ -1,8 +1,14 @@
 <script>
     export let showSideBar = false;
+    let showAllModels = false;
+
 
     const createModelClick = () =>{
         window.location.href = 'http://localhost:8080/ModelCreation';
+    }
+
+    const homeClick = () =>{
+        window.location.href = 'http://localhost:8080/';
     }
 
 </script>
@@ -12,7 +18,10 @@
     <div class="backdrop" on:click|self> <!--this is an event modifier and a passed event-->
         <div id="sidebar" style="padding-top: 5%;">
             <br>
+            <p on:click={homeClick}>Home</p>
             <p on:click={createModelClick}>Create Model</p>
+            <p id="myModels">My Models</p>
+            <div id="logoSideBar" on:click={homeClick} />
         </div>
     </div>
 {/if}
@@ -51,5 +60,19 @@
 
     #sidebar p:hover {
     cursor: pointer;
+    color: orange;
+    }
+
+    #logoSideBar{
+        position: absolute;
+        width: 117px;
+        height: 60px;
+        /* put in bottom right */
+        bottom: 100px;
+        right: 10px;
+        background: url("https://cdn.discordapp.com/attachments/1026984528276902018/1043198172257857587/ML_SILVER_BLACK_Small.png") no-repeat;
+    }
+    #logoSideBar:hover{
+        cursor: pointer;
     }
 </style>
