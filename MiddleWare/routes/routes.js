@@ -55,3 +55,10 @@ exports.getById = async(req, res) => {
     client.close();
     res.send(findResult);
 }
+
+exports.getAllByEmail = async(req, res) => {
+    await client.connect();
+    const findResult = await modelCollection.find({"user_mail": req.params.email}).toArray();
+    client.close();
+    res.send(findResult);
+}

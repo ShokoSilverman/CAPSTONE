@@ -1,7 +1,5 @@
 <script>
     export let showSideBar = false;
-    let showAllModels = false;
-
 
     const createModelClick = () =>{
         window.location.href = 'http://localhost:8080/ModelCreation';
@@ -9,6 +7,15 @@
 
     const homeClick = () =>{
         window.location.href = 'http://localhost:8080/';
+    }
+
+    const userModelsClick = () =>{
+        window.location.href = 'http://localhost:8080/UserModels';
+    }
+
+    const logOut = () =>{
+        document.cookie = null;
+        homeClick();
     }
 
 </script>
@@ -20,7 +27,8 @@
             <br>
             <p on:click={homeClick}>Home</p>
             <p on:click={createModelClick}>Create Model</p>
-            <p id="myModels">My Models</p>
+            <p on:click={userModelsClick}>My Models</p>
+            <p on:click={logOut}>Log Out</p>
             <div id="logoSideBar" on:click={homeClick} />
         </div>
     </div>

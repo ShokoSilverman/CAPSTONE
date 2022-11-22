@@ -140,8 +140,10 @@
 {/if}
 <Sidebar showSideBar={showSideBar}></Sidebar>
 <main>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="logo" id="logoMainPage" on:click={()=>{window.open('https://www.linkedin.com/in/%F0%9F%90%8Dsimon-silverman-581443220/', '_blank');}}></div>
 	{#if isLoggedIn}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<p class=curUser on:click={toggleShowBar}>{loggedUser}</p>
 	{:else}
 	<button on:click={toggleModal} id="signModal">Login/Sign Up</button>
@@ -153,9 +155,10 @@
 	<!-- <div>{models}</div> -->
 
 	<div id="modelList">
-	{#each modelList as model (model._id)}
+	{#each modelList as model}
 		<p>{model.id}</p>
-		<p>{model.name}</p>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<p class="hover" on:click={()=>{document.location.href=`/UseModel/${model.id}`}}>{model.name}</p>
 		<p>{model.createdBy}</p>
 		<p>{model.dateCreated}</p>
 		<p class="modelDescription" title={model.description}>{model.description}</p>
@@ -233,6 +236,10 @@
 
 	.modelDescription{
 		overflow: hidden;
+	}
+
+	.hover:hover{
+		cursor: pointer;
 	}
 
 	

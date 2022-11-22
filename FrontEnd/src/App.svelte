@@ -5,6 +5,7 @@
 	import ModelCreation from './ModelCreation.svelte';
 	import NotFound from './NotFound.svelte';
 	import UseModel from './UseModel.svelte';
+	import UserModels from './UserModels.svelte';
 
 	const getAllModels = async () => {
 		const response = await fetch("http://localhost:5000/getAllModels");
@@ -14,7 +15,12 @@
 
 	const getModelById = async (id) => {
 		const response = await fetch(`http://localhost:5000/getById/${id}`);
-		// const response = await fetch(`http://localhost:5000/getById/63767433911301ea5e0a6fef`);
+		const data = await response.json();
+		return data;
+	};
+
+	const getUserModels = async (email) => {
+		const response = await fetch(`http://localhost:5000/getAllByEmail/${email}`);
 		const data = await response.json();
 		return data;
 	};
@@ -43,7 +49,8 @@
 	router('/UseModel/:id',
 	async(ctx, next) => {
 		let model = await getModelById(ctx.params.id);
-		params = {"model": model}
+		let userObj = JSON.parse(document.cookie);
+		params = {"model": model, "loggedUser": userObj.loggedUser, "loggedEmail": userObj.loggedEmail}
 		next();
 	},
 	() => (page=UseModel)
@@ -56,6 +63,15 @@
 		next();
 	},
 	() => (page=ModelCreation)
+	);
+	router('/UserModels/',
+	async(ctx, next) => {
+		let userObj = JSON.parse(document.cookie);
+		let models = await getUserModels(userObj.loggedEmail);
+		params = {"models": models, "loggedUser": userObj.loggedUser, "loggedEmail": userObj.loggedEmail};
+		next();
+	},
+	() => (page=UserModels)
 	);
 	router('/*', () => (page=NotFound));
 

@@ -1,17 +1,6 @@
-// const express = require('express');
 const routes = require('./routes/routes.js');
-
-// const app = express();
-
-// // const urlencodedParser = express.urlencoded({
-// //     extended: false
-// // })
-
-// app.get('/', routes.root);
-
-// app.listen(3000);
-
 const express = require('express');
+
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
@@ -32,6 +21,7 @@ app.get('/getAllModels', routes.getAllModels);
 app.post('/createUser', routes.createUser);
 app.post('/login', routes.login);
 app.get('/getById/:id', routes.getById);
+app.get('/getAllByEmail/:email', routes.getAllByEmail)
 
 
 

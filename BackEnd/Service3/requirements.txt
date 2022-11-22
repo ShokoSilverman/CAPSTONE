@@ -3,3 +3,4 @@ pymongo[srv]
 joblib
 py_eureka_client
 Flask-Cors
+scikit-learn

@@ -28,16 +28,6 @@
         //change my backend to use json instead of form data
         console.log(modelObject)
 
-        // const request = new XMLHttpRequest();
-        // request.open("POST", "http://localhost:8888/mainlearningapi/createModel");
-        // request.setRequestHeader("Content-Type", "multipart/form-data");
-        // request.send(JSON.stringify(modelObject));
-        // request.onload = () =>{
-		// 	alert(request.responseText)
-        // }
-
-        // let response = await axios.post('http://localhost:8888/mainlearningapi/createModel', modelObject)
-        
         let entries = Object.entries(modelObject)
 
         let formData = new FormData();
@@ -57,6 +47,7 @@
             .then(function (response) {
                 //handle success
                 console.log(response);
+                window.location.href = `http://localhost:8080/UseModel/${response.data}`;
         })
             .catch(function (response) {
                 //handle error
@@ -73,39 +64,40 @@
 <!-- add sidebar and top right menu to this page -->
 <Sidebar showSideBar={showSideBar}></Sidebar>
 <main>
-<p class=curUser on:click={()=>{showSideBar = !showSideBar}}>{username}</p>
-<form>
-    <label for="">model name:</label>
-    <input type="text" bind:value={modelName} maxlength="30">
-    <br>
-    <label for="">description:</label>
-    <input type="text" bind:value={modelDescription}>
-    <br>
-    <label for="">type:</label>
-    <label for="">Classification: </label>
-    <input type="checkbox" name="" id="" bind:checked={isClassification} on:click={() => {isClassification = !isClassification; isRegression = !isClassification}}>
-    <label for="">Regression: </label>
-    <input type="checkbox" name="" id="" bind:checked={isRegression} on:click={() => {isRegression = !isRegression; isClassification = !isRegression}}>
-    <br>
-    <label for="">Output field: </label>
-    <input type="text" bind:value={modelOutput}>
-    <br>
-    <label for="">training %: </label>
-    <input type="text" bind:value={trainingPercent}>
-    <br>
-    <label for="">minimum accuracy %:</label>
-    <input type="text" bind:value={minimumAccuracy}>
-    <br>
-    <label for="">public: </label>
-    <input type="checkbox" bind:checked={isPublic} on:click={() => {isPrivate = !isPrivate}}>
-    <label for="">private: </label>
-    <input type="checkbox" bind:value={isPrivate} bind:checked={isPrivate}>
-    <br>
-    <label for="">input file:</label>
-    <input id="modelFile"type="file" accept=".csv," bind:value={modelFile}>
-    <br>
-    <button on:click|preventDefault={createModel}>Create Model</button>
-</form>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <p class=curUser on:click={()=>{showSideBar = !showSideBar}}>{username}</p>
+    <form>
+        <label for="">model name:</label>
+        <input type="text" bind:value={modelName} maxlength="30">
+        <br>
+        <label for="">description:</label>
+        <input type="text" bind:value={modelDescription}>
+        <br>
+        <label for="">type:</label>
+        <label for="">Classification: </label>
+        <input type="checkbox" name="" id="" bind:checked={isClassification} on:click={() => {isClassification = !isClassification; isRegression = !isClassification}}>
+        <label for="">Regression: </label>
+        <input type="checkbox" name="" id="" bind:checked={isRegression} on:click={() => {isRegression = !isRegression; isClassification = !isRegression}}>
+        <br>
+        <label for="">Output field: </label>
+        <input type="text" bind:value={modelOutput}>
+        <br>
+        <label for="">training %: </label>
+        <input type="text" bind:value={trainingPercent}>
+        <br>
+        <label for="">minimum accuracy %:</label>
+        <input type="text" bind:value={minimumAccuracy}>
+        <br>
+        <label for="">public: </label>
+        <input type="checkbox" bind:checked={isPublic} on:click={() => {isPrivate = !isPrivate}}>
+        <label for="">private: </label>
+        <input type="checkbox" bind:value={isPrivate} bind:checked={isPrivate}>
+        <br>
+        <label for="">input file:</label>
+        <input id="modelFile"type="file" accept=".csv," bind:value={modelFile}>
+        <br>
+        <button on:click|preventDefault={createModel}>Create Model</button>
+    </form>
 </main>
 
 <style>
