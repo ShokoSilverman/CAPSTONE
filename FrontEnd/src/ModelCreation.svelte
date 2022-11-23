@@ -35,9 +35,7 @@
             console.log(entries[i][0], entries[i][1], entries[i]);
             formData.append(entries[i][0], entries[i][1])
         }
-        //send form data to backend
-        // let response = await axios.post('http://localhost:8888/mainlearningapi/createModel', formData)
-        // alert(response.data)
+        console.log(formData);
         axios({
             method: "post",
             url: "http://localhost:8888/mainlearningapi/createModel",

@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import pymongo
 from bson.objectid import ObjectId
 import joblib
@@ -26,9 +26,16 @@ eureka_client.init(eureka_server="http://eureka:8761/eureka",
                                 app_name="usemodelapi",
                                 instance_port=your_rest_server_port)
 
+def debug_out(item: str):
+    print('---------------------------------------------------',item,'---------------------------------------------------', sep='\n')
+
 #use the id to find the model, load it with pandas/sklearn, shoot back a result (stretch goal is letting user input multiple entries at once)
 def model_input(id: str, entered_data: list) -> list:
+    # debug_out(str(str(ObjectId(id)) + ' here1'))
+    # debug_out(id)
     model = col.find_one({'_id':ObjectId(id)})
+    if(model is None): return Response("{'NullPointerError':'Object Can Not Be Found with id: " + str(ObjectId(id)) +  "'}", status=404, mimetype='application/json')
+    print(model)
     trained = model['training']
     with open('trained.joblib', 'wb') as f:
         f.write(trained)
@@ -36,13 +43,15 @@ def model_input(id: str, entered_data: list) -> list:
     predictions = list(model.predict([entered_data]))[0]
     os.remove('trained.joblib')
     return predictions
+    # return id
 
 
-@app.route('/useModel', methods=['GET'])
+@app.route('/useModel', methods=['POST'])
 @cross_origin()
 def use_model():
-    id: str = request.form.get('id')
-    entered_data: list = str(request.form.get('entered_data')).split(',')
+    data: dict = request.args.to_dict()
+    id: str = data.get('id')
+    entered_data: list = str(data.get('entered_data')).split(',')
     return model_input(id=id, entered_data=entered_data)
     
 

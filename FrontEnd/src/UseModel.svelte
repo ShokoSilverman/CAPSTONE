@@ -22,29 +22,13 @@
         let testValCombo = testValues.join(",");
         console.log(testValCombo);
 
-        let learnedValue;
+        let response = await axios.post(`http://localhost:8888/usemodelapi/useModel?id=${model._id}&entered_data=${testValCombo}`);
+        console.log(response);
 
-        // let data_out = {'id': model._id, 'entered_data': testValCombo}
-        let data_out = {'id': '63767433911301ea5e0a6fef', 'entered_data': '21,1'}
-        console.log(data_out)
-
-        axios({
-            method: "get",
-            url: "http://localhost:8888/usemodelapi/useModel",
-            data: {'id': model._id, 'entered_data': testValCombo},
-            // data: data_out,
-            headers: { "Content-Type": "multipart/form-data" },
-        })
-            .then(function (response) {
-                //handle success
-                console.log(response);
-                learnedValue = response.data;
-                console.log(learnedValue)
-        })
-            .catch(function (response) {
-                //handle error
-                console.log(response);
-        });
+        let learnedValue = response.data;
+        alert(learnedValue)
+        console.log(learnedValue);
+        
     }
 
 </script>
