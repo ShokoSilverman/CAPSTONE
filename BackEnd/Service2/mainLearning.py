@@ -49,13 +49,17 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
     model = create_new_model(df=df, output_field=output_field, model_type=model_type, t_percent=training_percent, min_acc=min_acc)
     #save the joblib and dot file file to the db
     #https://stackoverflow.com/questions/40015103/upload-file-size-16mb-to-mongodb
+    if model_type == 0:
+        model_type_str: str = "Classification"
+    if model_type == 1:
+        model_type_str: str = "Regression"
     joblib.dump(model, 'model.joblib')
     with open('model.joblib', "rb") as f:
         model_info = Binary(f.read())
     call(['dot', '-Tpng', 'graph.dot', '-o', 'tree.png'])
     with open('tree.png', "rb") as f:
         graph_info = Binary(f.read())
-    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_cols':input_cols})
+    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_cols':input_cols, 'model_type':model_type_str})
     os.remove('graph.dot')
     os.remove('tree.png')
     os.remove('model.joblib')
