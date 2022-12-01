@@ -140,29 +140,34 @@
 {/if}
 <Sidebar showSideBar={showSideBar}></Sidebar>
 <main>
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class="logo" id="logoMainPage" on:click={()=>{window.open('https://www.linkedin.com/in/%F0%9F%90%8Dsimon-silverman-581443220/', '_blank');}}></div>
 	{#if isLoggedIn}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<p class=curUser on:click={toggleShowBar}>{loggedUser}</p>
 	{:else}
 	<button on:click={toggleModal} id="signModal">Login/Sign Up</button>
 	{/if}
-	<h1>Welcome to ML-Silver</h1>
-	<h4>ML-Silver's creator had one goal in mind:</h4>
-	<h4>Bringing machine learning to the everyday person, and make it as easy as possible.</h4>
-
-	<!-- <div>{models}</div> -->
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div id="headerWrapper">
+		<div style="width: 467px;">
+		<div class="logo" id="logoMainPage" on:click={()=>{window.open('https://www.linkedin.com/in/%F0%9F%90%8Dsimon-silverman-581443220/', '_blank');}}></div>
+		</div>
+		<div id="textWrapper">
+			<h1>Welcome to ML-Silver</h1>
+			<h4>ML-Silver's creator had one goal in mind:</h4>
+			<h4>Bring machine learning to the everyday person, and make it as easy as possible.</h4>
+		</div>
+	</div>
 
 	<div id="modelList">
 	{#each modelList as model}
-		<p>{model.id}</p>
+		<div class="modelWrapper">
+		<div class="modelID">{model.id}</div>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<p class="hover" on:click={()=>{document.location.href=`/UseModel/${model.id}`}}>{model.name}</p>
-		<p>{model.createdBy}</p>
-		<p>{model.dateCreated}</p>
-		<p class="modelDescription" title={model.description}>{model.description}</p>
-		<br>
+		<div class="modelName" on:click={()=>{document.location.href=`/UseModel/${model.id}`}}>{model.name}</div>
+		<div class="modelUser">{model.createdBy}</div>
+		<div class="modelDate">{model.dateCreated}</div>
+		<div class="modelDescription" title={model.description}>{model.description}</div>
+		</div>
 	{/each}
 	</div>
 </main>
@@ -182,6 +187,7 @@
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
+		margin-bottom: 1%;
 	}
 	h4 {
 		color: orange;
@@ -230,18 +236,36 @@
 		cursor: pointer;
 	}
 
-	#modelList p{
-		display: inline-block;
-	}
-
-	.modelDescription{
-		overflow: hidden;
-	}
-
-	.hover:hover{
-		cursor: pointer;
+	#modelList{
+		/* display: inline-block; */
+		margin: 0 auto;
 	}
 
 	
+
+
+	#headerWrapper{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+	}
+
+	#textWrapper{
+		margin-top: 4%;
+	}
+
+	.modelWrapper{
+		display: flex;
+		flex-direction: row;
+	}
+
+	.modelID{
+		border: 3px solid orange;
+		border-bottom-width: 1.5px;
+		width: 20%;
+		text-overflow: ellipsis;
+	}
+
+
 
 </style>

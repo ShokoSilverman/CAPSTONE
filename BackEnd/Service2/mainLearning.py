@@ -41,11 +41,6 @@ input_cols = []
 def run_time(data_json: dict, output_field: str, model_type: int, training_percent: int, min_acc: int, name: str, is_private: bool, user: str, user_email: str, description: str): #returns the inserted ID
     df = data_intake(data_json)
     df:pd.DataFrame = df
-    #check regression for nums
-    if model_type == 1:
-        for column in df.columns:
-            if not df[column].dtype in ['float', 'int64']:
-                raise ValueError('All values must be numeric!')
     model = create_new_model(df=df, output_field=output_field, model_type=model_type, t_percent=training_percent, min_acc=min_acc)
     #save the joblib and dot file file to the db
     #https://stackoverflow.com/questions/40015103/upload-file-size-16mb-to-mongodb
@@ -76,14 +71,15 @@ def data_intake(data_json: dict) -> pd.DataFrame:
 
 #model type 0 = classifier, model type 1 = regressions
 def create_new_model(df: pd.DataFrame, output_field: str, model_type: str, t_percent: int, min_acc: int):
-    X = df.drop(columns=[output_field]) #input set #can not change the variable name on these, library wont work without it
-    global input_cols
-    input_cols = [str(i) for i in X.columns]
-    y = df[output_field] #output set
     if model_type == 0: #classifier
         model = DecisionTreeClassifier()
     elif model_type == 1: #regression
         model = DecisionTreeRegressor()
+        df = df.round(decimals=0)
+    X = df.drop(columns=[output_field]) #input set #can not change the variable name on these, library wont work without it
+    global input_cols
+    input_cols = [str(i) for i in X.columns]
+    y = df[output_field] #output set
     #no else statement, stretch goal is adding more types
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=(t_percent/100))
     min_acc_percent: float = (min_acc//100)

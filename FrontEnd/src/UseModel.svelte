@@ -1,19 +1,18 @@
 <script>
     import { RingLoader } from 'svelte-loading-spinners';
+    import BigImg from './BigImg.svelte';
+    
 
 
     import axios from "axios";
     import Sidebar from "./sidebar.svelte";
     export let params;
-
-    const outputElement = document.getElementById("outputVal");
-    
     
     let username = params.loggedUser;
     let email = params.LoggedEmail;
     let showSideBar = false;
     let model = params.model;
-    console.log(model)
+    // console.log(model)
     let name = model.name;
     let description = model.description;
     let userCreated = model.user;
@@ -22,8 +21,15 @@
     let inputCols = model.input_cols;
 
     let showLoader = false;
+    let showBigImg = false;
 
-    
+    const togBigImg = () =>{
+        showBigImg = !showBigImg;
+        let sideToggle = document.getElementsByClassName('curUser')[0]
+        if (sideToggle.style.visibility == 'hidden'){
+            sideToggle.style.visibility = 'visible';
+        }else sideToggle.style.visibility = 'hidden';
+    }
     
     const testData = async() =>{
         let learnedValue;
@@ -35,7 +41,7 @@
             testValues.push(userInputs[i].value);
         }
         let testValCombo = testValues.join(",");
-        console.log(testValCombo);
+        // console.log(testValCombo);
         showLoader = true;
         try{
         let response = await axios.post(`http://localhost:8888/usemodelapi/useModel?id=${model._id}&entered_data=${testValCombo}`);
@@ -43,13 +49,14 @@
         }catch(err){
             learnedValue = "An error has occured, please try again later";
         }
-        outputVal.textContent = learnedValue;
+        outputVal.textContent = "Result: " + learnedValue;
         outputVal.style.visibility = "visible";
         showLoader = false;
     }
 
 </script>
 <Sidebar showSideBar={showSideBar}></Sidebar>
+<BigImg showBigImg={showBigImg} on:click={togBigImg} img="data:image;base64,{graph}"></BigImg>
 <main>
     <h1>{name}</h1>
     <div id="mainWrapper">
@@ -66,18 +73,22 @@
         <div id="mainInfo">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <p class=curUser on:click={()=>{showSideBar = !showSideBar}}>{username}</p>
-            <img id="treeImg" src="data:image;base64,{graph}" alt="">
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- add button to top left that shows absolute when big pic shows -->
+            <img id="treeImg" src="data:image;base64,{graph}" alt="" on:click={togBigImg}>
             <div id="inputContainer">
                 {#each inputCols as inputCol}
-                    <input class="userIn" type="text" placeholder={inputCol}>
+                    <input class="userIn" type="text" placeholder={inputCol} title={inputCol}>
                 {/each}
-                <input type="text" name="" id="">
+                <!-- <input class="userIn" type="text" name="" id="">
+                <input class="userIn" type="text" name="" id=""> -->
             </div>
             <button on:click={testData}>Test Data</button>
-            <p id="outputVal"></p>
             {#if showLoader}
                 <RingLoader />
             {/if}
+            <!-- move loading animation here and reformat to fit in bottom left of screen, uses too much space on right side and can help fill in, add orange bored to whole thing -->
+            <p id="outputVal"></p>
         </div>
         <!-- <div id="RightInfo"></div> -->
     </div>
@@ -85,6 +96,7 @@
 </main>
 
 <style>
+
     
     #mainWrapper{
         display: flex;
@@ -108,11 +120,6 @@
         
     }
 
-    #treeImg{
-        width: 60%;
-        border: 8px solid orange;
-    }
-
     #inputContainer{
         display: flex;
         flex-direction: row;
@@ -120,6 +127,16 @@
         justify-content: center;
         flex-wrap: wrap;
         width: 60%;
+    }
+
+    #treeImg{
+        width: 60%;
+        border: 8px solid orange;
+        margin-bottom: 1%;
+    }
+
+    #treeImg:hover{
+        cursor: pointer;
     }
 
     h1{
@@ -130,24 +147,39 @@
         margin-left: 1%;
     }
 
-    h2{
-        font-size: 1.4rem;
-        color: orange;
-        /* margin-bottom: 1%;
-        margin-top: 1%; */
-    }
-
     #infoDiv{
         margin-left: 2%;
         margin-top: 12%;
     }
 
+    h2{
+        font-size: 1.8rem;
+        color: orange;
+        /* margin-bottom: 1%;
+        margin-top: 1%; */
+    }
+
     .modelInfo{
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         color: white;
         margin-bottom: 1%;
         margin-top: 1%;
         margin-left: 5%;
     }
+
+    .userIn{
+        width: 20%;
+        margin: 1% 1% 1% 1%;
+    }
+
+    #outputVal{
+        font-size: 2rem;
+        color: orange;
+        margin-top: 1%;
+        visibility: hidden;
+    }
+
+    
+
 
 </style>

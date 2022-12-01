@@ -38,10 +38,12 @@
 
 <style>
     .backdrop{
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         position: fixed;
         background: rgba(76, 80, 94, 0.6);
+        top: 0;
+        left: 0;
     }
 
     #sidebar{

@@ -130,10 +130,17 @@ button:focus {
 	user-select: none;
 	text-decoration: underline;
 	text-decoration-thickness: 3%;
+	position: fixed;
 }
 .curUser:hover{
 	color: rgb(190, 123, 0);
+	
 }
+
+body {
+    overflow: hidden; /* Hide scrollbars */
+    }
+
 
 .logo {
 	background: url("https://cdn.discordapp.com/attachments/1026984528276902018/1043193632620032072/unknown.png") no-repeat;

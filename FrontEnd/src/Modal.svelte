@@ -6,7 +6,7 @@
 {#if showModal}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="backdrop" on:click|self> <!--this is an event modifier and a passed event-->
-        <div id="modal">
+        <div id="modal"  >
             <!-- <p>{message}</p> -->
             <slot></slot>
         </div>

@@ -52,7 +52,7 @@ def use_model():
     data: dict = request.args.to_dict()
     id: str = data.get('id')
     entered_data: list = str(data.get('entered_data')).split(',')
-    return model_input(id=id, entered_data=entered_data)
+    return str(model_input(id=id, entered_data=entered_data))
     
 
 app.run(host='0.0.0.0', port=8082)
