@@ -54,7 +54,7 @@ def run_time(data_json: dict, output_field: str, model_type: int, training_perce
     call(['dot', '-Tpng', 'graph.dot', '-o', 'tree.png'])
     with open('tree.png', "rb") as f:
         graph_info = Binary(f.read())
-    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_cols':input_cols, 'model_type':model_type_str})
+    inserted = col.insert_one({'name':name, 'training': model_info, 'graph':graph_info, 'dateCreated': str(date.today()), 'is_private': is_private, 'user': user , 'user_mail':user_email, 'description':description, 'input_cols':input_cols, 'model_type':model_type_str, 'output_field':output_field})
     os.remove('graph.dot')
     os.remove('tree.png')
     os.remove('model.joblib')

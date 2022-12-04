@@ -19,7 +19,7 @@ exports.getAllModels = async(req, res) => {
     const findResult = await modelCollection.find({"is_private":false}).toArray();
     // const findResult = await modelCollection.project({ name: 1 }).toArray();
     let results = [];
-    findResult.forEach((item) => {results.push({"id" : item._id, "name" : item.name, "createdBy" : item.user, 'description':item.description, 'dateCreated':item.dateCreated})});
+    findResult.forEach((item) => {results.push({"id" : item._id, "name" : item.name, "createdBy" : item.user, 'description':item.description, 'dateCreated':item.dateCreated, 'modelType':item.model_type, 'outputField':item.output_field})});
     client.close();
     res.send(results);
 }

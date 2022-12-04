@@ -3,7 +3,6 @@
     import BigImg from './BigImg.svelte';
     
 
-
     import axios from "axios";
     import Sidebar from "./sidebar.svelte";
     export let params;
@@ -12,13 +11,14 @@
     let email = params.LoggedEmail;
     let showSideBar = false;
     let model = params.model;
-    // console.log(model)
+    console.log(model)
     let name = model.name;
     let description = model.description;
     let userCreated = model.user;
     let dateCreated = model.dateCreated;
     let graph = model.graph;
     let inputCols = model.input_cols;
+    let outputField = model.output_field;
 
     let showLoader = false;
     let showBigImg = false;
@@ -49,7 +49,8 @@
         }catch(err){
             learnedValue = "An error has occured, please try again later";
         }
-        outputVal.textContent = "Result: " + learnedValue;
+        // outputVal.textContent = "Result: " + learnedValue;
+        outputVal.textContent = `${outputField}: ${learnedValue}`;
         outputVal.style.visibility = "visible";
         showLoader = false;
     }
@@ -67,7 +68,7 @@
                 <h2>Date Created:</h2>
                 <p class="modelInfo">{dateCreated}</p>
                 <h2>Description:</h2>
-                <p class="modelInfo">{description}</p>
+                <p class="modelInfo" id="descBox">{description}</p>
             </div>
         </div>
         <div id="mainInfo">
@@ -177,6 +178,15 @@
         color: orange;
         margin-top: 1%;
         visibility: hidden;
+    }
+
+    #descBox{
+        height: 300px;
+        overflow: auto;
+        background-color: white;
+        color: black;
+        border: 3px orange solid;
+
     }
 
     

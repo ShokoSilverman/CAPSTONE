@@ -1,6 +1,7 @@
 <script>
 	import Modal from './Modal.svelte';
     import Sidebar from './sidebar.svelte';
+	
 
 	export let params;
 	let modelList = params.models;
@@ -65,6 +66,7 @@
         request.onload = () =>{
 			if(request.responseText == 1){
 				doLogin(username, email);
+				showModal = false;
 			}else{
 				passCheck = request.responseText;
 			}
@@ -147,28 +149,42 @@
 	<button on:click={toggleModal} id="signModal">Login/Sign Up</button>
 	{/if}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div id="headerWrapper">
+	<div class="headerWrapper">
 		<div style="width: 467px;">
-		<div class="logo" id="logoMainPage" on:click={()=>{window.open('https://www.linkedin.com/in/%F0%9F%90%8Dsimon-silverman-581443220/', '_blank');}}></div>
+			<div class="logo logoMainPage" on:click={()=>{window.open('https://www.linkedin.com/in/%F0%9F%90%8Dsimon-silverman-581443220/', '_blank');}}></div>
 		</div>
 		<div id="textWrapper">
 			<h1>Welcome to ML-Silver</h1>
-			<h4>ML-Silver's creator had one goal in mind:</h4>
+			<h3>ML-Silver's creator had one goal in mind:</h3>
 			<h4>Bring machine learning to the everyday person, and make it as easy as possible.</h4>
 		</div>
 	</div>
 
-	<div id="modelList">
+	<div class="modelList">
+		<!-- <div style="border-bottom-width: 1.5px;" class="horBar"></div> -->
+		<div class="modelWrapper tableHeaders">
+			<div class="modelID">ID</div>
+			<div class="modelName">Model Name</div>
+			<div class="modelUser">Created By</div>
+			<div class="modelDate">Date Created</div>
+			<div class="modelType">Model Type</div>
+			<div class="modelDescription">Model Description</div>
+			<div style="width: 5%;">Use</div>
+		</div>
 	{#each modelList as model}
 		<div class="modelWrapper">
-		<div class="modelID">{model.id}</div>
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="modelName" on:click={()=>{document.location.href=`/UseModel/${model.id}`}}>{model.name}</div>
-		<div class="modelUser">{model.createdBy}</div>
-		<div class="modelDate">{model.dateCreated}</div>
-		<div class="modelDescription" title={model.description}>{model.description}</div>
+			<div class="modelID">{model.id}</div>
+			<div class="modelName">{model.name}</div>
+			<div class="modelUser">{model.createdBy}</div>
+			<div class="modelDate">{model.dateCreated}</div>
+			<div class="modelType">{model.modelType}</div>
+			<div class="modelDescription" title={model.description}>{model.description}</div>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<div class="modelGo" on:click={()=>{document.location.href=`/UseModel/${model.id}`}}>GO</div>
+			
 		</div>
 	{/each}
+		<div style="top-bottom-width: 1.5px;" class="horBar"></div>
 	</div>
 </main>
 
@@ -189,6 +205,14 @@
 		font-weight: 100;
 		margin-bottom: 1%;
 	}
+
+	h3 {
+		color: orange;
+		text-transform: uppercase;
+		font-size: 2.5em;
+		font-weight: 100;
+	}
+
 	h4 {
 		color: orange;
 		text-transform: uppercase;
@@ -227,24 +251,20 @@
 		background: orange;
 	}
 
-	#logoMainPage{
+	.logoMainPage{
 		width: 467px;
 		height: 241px;
 	}
 
-	#logoMainPage:hover{
+	.logoMainPage:hover{
 		cursor: pointer;
 	}
 
-	#modelList{
-		/* display: inline-block; */
-		margin: 0 auto;
-	}
-
+	
 	
 
 
-	#headerWrapper{
+	.headerWrapper{
 		display: flex;
 		flex-direction: row;
 		justify-content: space-evenly;
@@ -254,18 +274,7 @@
 		margin-top: 4%;
 	}
 
-	.modelWrapper{
-		display: flex;
-		flex-direction: row;
-	}
-
-	.modelID{
-		border: 3px solid orange;
-		border-bottom-width: 1.5px;
-		width: 20%;
-		text-overflow: ellipsis;
-	}
-
+	
 
 
 </style>
